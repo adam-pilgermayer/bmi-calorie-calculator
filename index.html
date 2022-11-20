@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Static Template</title>
+		<link rel="stylesheet" href="./css/style.css" />
+	</head>
+	<body>
+		<h1 class="project-name">BMI & Calorie Calculator</h1>
+		<section class="calc-container">
+			<section class="calc-title-box">
+				<!--Title is depends on current switcher state-->
+				<h2 class="calc-title">Placeholder title</h2>
+			</section>
+			<section class="calc-container__top">
+				<section class="calc-switcher">
+					<button class="calc-btn calc-btn__bmi current-btn">BMI</button>
+					<button class="calc-btn calc-btn__calories">CALORIES</button>
+				</section>
+			</section>
+			<section class="calc-container__bottom">
+				<form action="#" method="GET" class="calc-bmi__form">
+					<div class="calc-form-container__bmi">
+						<div class="calc-form-box">
+							<div class="measurement-switcher-container">
+								<span class="measurement-type">STANDARD</span>
+								<label for="toggle-this" class="measurement-switcher">
+									<input
+										class="measurement-switcher__inp"
+										type="checkbox"
+										id="toggle-this" />
+									<div class="measurement-switcher__shape"></div>
+								</label>
+								<span class="measurement-type">METRIC</span>
+							</div>
+						</div>
+						<div class="calc-form-box">
+							<label class="input-title" for="bmi-calc__pounds">Weight: </label>
+							<div class="input-container">
+								<input
+									class="js-bmi-pounds-inp textbox"
+									id="bmi-calc__pounds"
+									type="text"
+									inputmode="numeric"
+									name="pounds"
+									maxlength="15"
+									max="1000"
+									autocomplete="off"
+									pattern="[0-9]+[.]{0,1}[0-9]+"
+									required />
+								<label class="input-label" for="bmi-calc__pounds"
+									>(pounds)</label
+								>
+							</div>
+						</div>
+						<div class="calc-form-box">
+							<label class="input-title" for="bmi-calc__ft">Height: </label>
+							<div class="input-container">
+								<input
+									class="js-bmi-ft-inp textbox"
+									id="bmi-calc__ft"
+									type="text"
+									inputmode="numeric"
+									name="feet"
+									maxlength="2"
+									max="99"
+									autocomplete="off"
+									pattern="[0-9]{1,2}"
+									required />
+								<label class="input-label" for="bmi-calc__ft">(Feet)</label>
+							</div>
+							<div class="input-container">
+								<input
+									class="js-bmi-inch-inp textbox"
+									id="bmi-calc__inch"
+									type="text"
+									inputmode="numeric"
+									name="inches"
+									maxlength="2"
+									max="99"
+									autocomplete="off"
+									pattern="[0-9]{1,2}"
+									required />
+								<label class="input-label" for="bmi-calc__inch">(Inches)</label>
+							</div>
+						</div>
+						<div class="calc-form-box">
+							<div class="form-buttons">
+								<button class="reset-btn" type="reset">Reset</button>
+								<button class="calculate-btn" type="submit">Calculate</button>
+							</div>
+						</div>
+						<div class="calc-form-box">
+							<div class="js-result result"></div>
+						</div>
+					</div>
+				</form>
+				<form action="#" method="GET" class="calc-calories__form"></form>
+			</section>
+		</section>
+
+		<script src="./js/app.js"></script>
+	</body>
+</html>

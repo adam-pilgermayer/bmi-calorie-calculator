@@ -1,0 +1,231 @@
+:root {
+	--tablet: 768px;
+	--desktop: 1200px;
+
+	--light-border-radius: 2px;
+	--medium-border-radius: 4px;
+
+	--main-outline: 2px solid var(--darker-orange);
+
+	--btn-transition-speed: 80ms;
+
+	--light-grey: #5e5e5e;
+	--dark-grey: #444;
+	--black: #1f1f1f;
+	--darker-black: #111;
+	--white: #ededed;
+	--orange: #d89400;
+	--darker-orange: #b47b00;
+	--light-blue: #3093f0;
+	--blue: #0f79dd;
+	--red: #ff7a7a;
+	--green: #1ebe36;
+	--yellow: #ddbf12;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	min-width: 320px;
+}
+
+body {
+	background-color: var(--dark-grey);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+	color: var(--white);
+}
+
+.project-name {
+	margin: 4rem;
+	font-weight: 400;
+	font-size: 3rem;
+	letter-spacing: 2px;
+}
+
+.calc-container {
+	background-color: var(--black);
+	border-radius: var(--light-border-radius);
+	box-shadow: 0 0 4px var(--black);
+	width: 100%;
+	max-width: 500px;
+}
+
+.calc-title-box {
+	padding: 2rem;
+	width: 100%;
+}
+
+.calc-title {
+	font-size: 2.4rem;
+	font-weight: 400;
+	letter-spacing: 1px;
+	text-align: left;
+	padding-bottom: 0.8rem;
+	border-bottom: 1px solid var(--orange);
+}
+
+.calc-container__top {
+	display: flex;
+	justify-content: center;
+}
+
+.calc-switcher {
+	background-color: var(--dark-grey);
+	padding: 2rem;
+	box-shadow: inset 0 0 8px 3px black;
+	border-radius: var(--light-border-radius);
+}
+
+.calc-btn {
+	width: 116px;
+	margin: 0 0.8rem;
+	padding: 1.2rem 0;
+	text-align: center;
+	color: var(--white);
+	font-size: 2rem;
+	border: none;
+	border-radius: var(--light-border-radius);
+	background-color: var(--darker-black);
+	box-shadow: 1px 1px 2px var(--darker-black);
+	cursor: pointer;
+	transition: background-color var(----btn-transition-speed);
+}
+
+.calc-btn:focus-visible {
+	outline: var(--main-outline);
+}
+
+.calc-btn:hover {
+	background-color: var(--black);
+	box-shadow: 1px 1px 4px var(--black);
+}
+
+.current-btn {
+	background-color: var(--darker-orange);
+	box-shadow: 1px 1px 2px var(--darker-orange);
+}
+
+.current-btn:hover {
+	background-color: var(--orange);
+	box-shadow: 1px 1px 4px var(--orange);
+}
+
+.calc-form-container__bmi {
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 3rem auto 4rem;
+	font-size: 1.8rem;
+}
+
+.calc-form-box:first-child {
+	align-self: flex-end;
+	margin: 1rem 0;
+}
+
+.measurement-switcher-container {
+	display: flex;
+	gap: 1rem;
+	font-size: 1.5rem;
+}
+
+.measurement-switcher {
+	--width: 40px;
+	--height: calc(var(--width) / 2);
+	--radius: calc(var(--height) / 2);
+
+	display: inline-block;
+	cursor: pointer;
+}
+
+.measurement-switcher__inp {
+	opacity: 0;
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}
+
+.measurement-switcher__shape {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: var(--width);
+	height: var(--height);
+	border-radius: var(--radius);
+	background-color: var(--white);
+	box-shadow: inset 0 0 1px var(--darker-black);
+}
+
+.measurement-switcher__inp:focus-visible + .measurement-switcher__shape {
+	outline: var(--main-outline);
+}
+
+.measurement-switcher__shape::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: var(--height);
+	height: var(--height);
+	background-color: var(--orange);
+	border-radius: 50%;
+	box-shadow: 0 0 1px var(--orange);
+	transition: transform 200ms ease-in-out;
+}
+
+.measurement-switcher__inp:checked + .measurement-switcher__shape::after {
+	transform: translateX(var(--height));
+	margin-right: 1px;
+}
+
+.input-container {
+	width: max-content;
+	display: flex;
+	align-items: center;
+}
+
+.textbox {
+	width: 160px;
+	margin: 1rem;
+	padding: 0.5rem;
+	border: none;
+	border-radius: var(--light-border-radius);
+	background-color: var(--light-grey);
+	box-shadow: inset 0 0 4px 4px var(--darker-black);
+	color: white;
+	font-size: 2.4rem;
+}
+
+.textbox:focus-visible {
+	outline: var(--main-outline);
+	background-color: var(--dark-grey);
+}
+
+.reset-btn,
+.calculate-btn {
+	background-color: var(--blue);
+	box-shadow: 1px 1px 3px #1f1f1f;
+	border: none;
+	color: var(--white);
+	border-radius: var(--light-border-radius);
+	padding: 1rem 0;
+	margin: 1rem;
+	width: 110px;
+	font-size: 2rem;
+	transition: var(--btn-transition-speed);
+}
+
+.reset-btn:hover,
+.calculate-btn:hover {
+	background-color: var(--light-blue);
+}
