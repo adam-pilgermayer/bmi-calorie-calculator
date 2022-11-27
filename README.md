@@ -25,7 +25,7 @@ BMI has 4 levels:
 
 _ENGLISH UNITS_
 
-<code>Weight in lb / (Height in inch)<sup>2</sup> * 703</code>
+<code>Weight in lbs / (Height in inch)<sup>2</sup> * 703</code>
 
 _METRIC UNITS_
 
@@ -44,9 +44,18 @@ After all, multiply your BMR with your PAL value and you'll get your TDEE (Total
 
 #### BMR
 
-<code>**For Men:** 66.5 + (13.75 * weight in kg) + (5.003 * height in cm) - (6.75 * age)</code>
+_ENGLISH UNITS_
 
-<code>**For Women:** 655.1 + (9.563 * weight in kg) + (1.850 * height in cm) - (4.676 * age)</code>
+<code>**For Men:** 66.47 + (6.24 * weight in lbs) + (12.7 * height in inches) - (6.75 * age in years)</code>
+
+<code>**For Women:** 65.51 + (4.35 * weight in lbs) + (4.7 * height in inches) - (4.7 * age in years)</code>
+
+
+_METRIC UNITS_
+
+<code>**For Men:** 66.5 + (13.75 * weight in kg) + (5.003 * height in cm) - (6.75 * age in years)</code>
+
+<code>**For Women:** 655.1 + (9.563 * weight in kg) + (1.850 * height in cm) - (4.676 * age in years)</code>
 
 #### TDEE
 
