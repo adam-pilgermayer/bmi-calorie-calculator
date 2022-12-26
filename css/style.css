@@ -10,6 +10,7 @@
 	--btn-transition-speed: 80ms;
 
 	--light-grey: #5e5e5e;
+	--grey: #525252;
 	--dark-grey: #444;
 	--black: #1f1f1f;
 	--darker-black: #111;
@@ -42,10 +43,6 @@ body {
 	align-items: center;
 	height: 100vh;
 	color: var(--white);
-}
-
-.hidden {
-	display: none;
 }
 
 .project-name {
@@ -123,7 +120,8 @@ body {
 	box-shadow: 1px 1px 4px var(--orange);
 }
 
-.calc-form-container__bmi {
+.calc-form-container__bmi,
+.calc-form-container__calories {
 	width: 90%;
 	display: flex;
 	flex-direction: column;
@@ -132,18 +130,28 @@ body {
 	font-size: 1.8rem;
 }
 
-.calc-form-box:first-child {
+.calc-form-box__bmi:first-child,
+.calc-form-box__calories:first-child {
 	align-self: flex-end;
 	margin: 1rem 0;
 }
 
-.measurement-switcher-container {
+.calc-form-box__bmi:nth-child(2),
+.calc-form-box__bmi:nth-child(3),
+.calc-form-box__calories:nth-child(3),
+.calc-form-box__calories:nth-child(4),
+.calc-form-box__calories:nth-child(5),
+.calc-form-box__calories:nth-child(6) {
+	width: 350px;
+}
+
+.unit-switcher-container {
 	display: flex;
 	gap: 1rem;
 	font-size: 1.5rem;
 }
 
-.measurement-switcher {
+.unit-switcher {
 	--width: 40px;
 	--height: calc(var(--width) / 2);
 	--radius: calc(var(--height) / 2);
@@ -152,14 +160,12 @@ body {
 	cursor: pointer;
 }
 
-.measurement-switcher__inp {
+.unit-switcher__inp {
 	opacity: 0;
 	position: absolute;
-	top: -9999px;
-	left: -9999px;
 }
 
-.measurement-switcher__shape {
+.unit-switcher__shape {
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -170,24 +176,23 @@ body {
 	box-shadow: inset 0 0 1px var(--darker-black);
 }
 
-.measurement-switcher__inp:focus-visible + .measurement-switcher__shape {
+.unit-switcher__inp:focus-visible + .unit-switcher__shape {
 	outline: var(--main-outline);
 }
 
-.measurement-switcher__shape::after {
+.unit-switcher__shape::after {
 	content: "";
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: var(--height);
-	height: var(--height);
+	left: 2px;
+	width: calc(var(--height) - 4px);
+	height: calc(var(--height) - 4px);
 	background-color: var(--orange);
 	border-radius: 50%;
 	box-shadow: 0 0 1px var(--orange);
 	transition: transform 200ms ease-in-out;
 }
 
-.measurement-switcher__inp:checked + .measurement-switcher__shape::after {
+.unit-switcher__inp:checked + .unit-switcher__shape::after {
 	transform: translateX(var(--height));
 	margin-right: 1px;
 }
@@ -199,13 +204,13 @@ body {
 }
 
 .textbox {
-	width: 160px;
+	width: 180px;
 	margin: 1rem;
 	padding: 0.5rem;
 	border: none;
 	border-radius: var(--light-border-radius);
 	background-color: var(--light-grey);
-	box-shadow: inset 0 0 4px 4px var(--darker-black);
+
 	color: var(--white);
 	font-size: 2.4rem;
 }
@@ -213,6 +218,10 @@ body {
 .textbox:focus-visible {
 	outline: var(--main-outline);
 	background-color: var(--dark-grey);
+}
+
+.form-buttons {
+	margin: 3rem 0 0;
 }
 
 .reset-btn,
@@ -232,4 +241,80 @@ body {
 .reset-btn:hover,
 .calculate-btn:hover {
 	background-color: var(--light-blue);
+}
+
+.result {
+	padding: 2rem 4rem;
+	margin: 3rem 0 0;
+	font-size: 2.5rem;
+}
+
+.gender-selector-box {
+	background-color: var(--dark-grey);
+	border-radius: 50px;
+	height: 100%;
+	display: flex;
+	margin: 4rem auto;
+	user-select: none;
+}
+
+.gender-radio {
+	display: none;
+	appearance: none;
+}
+
+.gender-styled-radio {
+	display: inline-block;
+	width: 120px;
+	padding: 1.5rem 2rem;
+	text-align: center;
+	font-size: 1.8rem;
+	background-color: var(--grey);
+	box-shadow: inset 0 0 4px var(--black);
+	cursor: pointer;
+}
+
+.gender-styled-radio:hover {
+	background-color: var(--light-grey);
+}
+
+.gender-radio:checked ~ .gender-styled-radio {
+	background-color: var(--blue);
+}
+
+.gender-radio:checked ~ .gender-styled-radio:hover {
+	background-color: var(--light-blue);
+}
+
+.male-styled-radio {
+	border-radius: 50px 0 0 50px;
+}
+
+.female-styled-radio {
+	border-radius: 0 50px 50px 0;
+}
+
+.selector-input {
+	width: 265px;
+	font-size: 1.8rem;
+	padding: 1rem;
+	cursor: pointer;
+	border-right: 10px solid transparent;
+	box-shadow: none;
+}
+
+.hidden {
+	display: none;
+}
+
+.dangerous {
+	color: var(--red);
+}
+
+.warning {
+	color: var(--yellow);
+}
+
+.excellent {
+	color: var(--green);
 }
