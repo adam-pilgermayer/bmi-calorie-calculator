@@ -1,116 +1,28 @@
 const $title = document.querySelector(".js-calc-title");
-const $formContainer = document.querySelector(".js-form-container");
 
 //BMI constants
 const $bmiForm = document.querySelector(".js-calc-bmi__form");
 const $bmiButton = document.querySelector(".js-calc-btn__bmi");
+const $bmiUnit = document.querySelector(".js-unit-switcher-inp__bmi");
+const $bmiStandardInputs = [
+	...document.querySelectorAll(".js-standard-input__bmi"),
+];
+const $bmiMetricInputs = [
+	...document.querySelectorAll(".js-metric-input__bmi"),
+];
 
 //Calories constants
-const $caloriesForm = document.querySelector(".js-calc-calories__form");
 const $caloriesButton = document.querySelector(".js-calc-btn__calories");
+const $caloriesForm = document.querySelector(".js-calc-calories__form");
+const $caloriesUnit = document.querySelector(".js-unit-switcher-inp__calories");
+const $caloriesStandardInputs = [
+	...document.querySelectorAll(".js-standard-input__calories"),
+];
+const $caloriesMetricInputs = [
+	...document.querySelectorAll(".js-metric-input__calories"),
+];
 
-let ACTIVE_CALCULATOR = null; // 0 = bmi, 1 = calories
-
-function renderBmiForm() {
-	return `<form action="#" method="GET" class="calc-bmi__form js-calc-bmi__form">
-  <div class="calc-form-container__bmi">
-    <div class="calc-form-box">
-      <div class="measurement-switcher-container">
-        <span>STANDARD</span>
-        <label for="toggle-this" class="measurement-switcher">
-          <input
-            class="measurement-switcher__inp js-measurement-switcher__inp"
-            type="checkbox"
-            id="toggle-this"
-          />
-          <div class="measurement-switcher__shape"></div>
-        </label>
-        <span>METRIC</span>
-      </div>
-    </div>
-    <div class="calc-form-box">
-      <label class="input-title" for="bmi-calc__weight">Weight: </label>
-      <div class="input-container">
-        <input
-          class="js-weight-inp__bmi textbox"
-          id="bmi-calc__weight"
-          type="text"
-          inputmode="numeric"
-          name="pounds"
-          maxlength="15"
-          max="1000"
-          autocomplete="off"
-          pattern="[0-9]+[.]{0,1}[0-9]+"
-          required
-        />
-        <label
-          class="input-label js-label-of-main-weight__bmi"
-          for="bmi-calc__weight"
-          >(Pounds)</label
-        >
-      </div>
-    </div>
-    <div class="calc-form-box">
-      <label class="input-title" for="bmi-calc__height">Height: </label>
-      <div class="input-container">
-        <input
-          class="js-height-inp__bmi textbox"
-          id="bmi-calc__height"
-          type="text"
-          inputmode="numeric"
-          name="feet"
-          maxlength="2"
-          autocomplete="off"
-          pattern="[0-9]{,2}"
-          required
-        />
-        <label
-          class="input-label js-label-of-main-height__bmi"
-          for="bmi-calc__height"
-          >(Feet)</label
-        >
-      </div>
-      <div class="input-container js-extra-height-container">
-        <input
-          class="js-inch-inp__bmi textbox"
-          id="bmi-calc__inch"
-          type="text"
-          inputmode="numeric"
-          name="inches"
-          maxlength="2"
-          autocomplete="off"
-          pattern="[0-9]{,2}"
-          required
-        />
-        <label
-          class="input-label js-label-of-inches__bmi"
-          for="bmi-calc__inch"
-          >(Inches)</label
-        >
-      </div>
-    </div>
-    <div class="calc-form-box">
-      <div class="form-buttons">
-        <button class="reset-btn" type="reset">Reset</button>
-        <button class="calculate-btn" type="submit">Calculate</button>
-      </div>
-    </div>
-    <div class="calc-form-box">
-      <div class="js-result result">21.53</div>
-    </div>
-  </div>
-</form>`;
-}
-
-function renderCaloriesForm() {
-	return `<form
-  action="#"
-  method="GET"
-  class="calc-calories__form js-calc-calories__form"
->
-  HELLO
-</form>`;
-}
+let activeCalculator = null; // 0 = bmi, 1 = calories, null = default
 
 function setTitle(state) {
 	switch (state) {
@@ -131,23 +43,65 @@ function changeActiveBtnStyle(onBtn, offBtn) {
 	offBtn.classList.remove("current-btn");
 }
 
+function changeActiveForm(onForm, offForm) {
+	onForm.classList.remove("hidden");
+	offForm.classList.add("hidden");
+}
+
+function isMetric() {
+	if (activeCalculator === 0) {
+		return $bmiUnit.checked;
+	}
+	return $caloriesUnit.checked;
+}
+
+function changeActiveUnits(standard, metric) {
+	let isMetricAcitve = isMetric();
+
+	if (!isMetricAcitve) {
+		standard.forEach((elem) => {
+			elem.classList.remove("hidden");
+		});
+		metric.forEach((elem) => {
+			elem.classList.add("hidden");
+		});
+	} else {
+		standard.forEach((elem) => {
+			elem.classList.add("hidden");
+		});
+		metric.forEach((elem) => {
+			elem.classList.remove("hidden");
+		});
+	}
+}
+
+//***************
+// EventListeners
+//***************
+
 window.addEventListener("load", () => {
-	ACTIVE_CALCULATOR = 0;
-	$title.textContent = setTitle(ACTIVE_CALCULATOR);
-	changeActiveBtnStyle($bmiButton, $caloriesButton);
-	$formContainer.innerHTML = renderBmiForm();
+	activeCalculator = 0;
+	$title.textContent = setTitle(activeCalculator);
 });
 
 $bmiButton.addEventListener("click", () => {
-	ACTIVE_CALCULATOR = 0;
-	$title.textContent = setTitle(ACTIVE_CALCULATOR);
+	activeCalculator = 0;
+	$title.textContent = setTitle(activeCalculator);
 	changeActiveBtnStyle($bmiButton, $caloriesButton);
-	$formContainer.innerHTML = renderBmiForm();
+	changeActiveForm($bmiForm, $caloriesForm);
 });
 
 $caloriesButton.addEventListener("click", () => {
-	ACTIVE_CALCULATOR = 1;
-	$title.textContent = setTitle(ACTIVE_CALCULATOR);
+	activeCalculator = 1;
+	$title.textContent = setTitle(activeCalculator);
 	changeActiveBtnStyle($caloriesButton, $bmiButton);
-	$formContainer.innerHTML = renderCaloriesForm();
+	changeActiveForm($caloriesForm, $bmiForm);
+});
+
+$bmiUnit.addEventListener("click", () => {
+	changeActiveUnits($bmiStandardInputs, $bmiMetricInputs);
+});
+
+$caloriesUnit.addEventListener("click", () => {
+	changeActiveUnits($caloriesStandardInputs, $caloriesMetricInputs);
 });
