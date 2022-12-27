@@ -24,6 +24,12 @@ const $caloriesMetricInputs = [
 
 let activeCalculator = null; // 0 = bmi, 1 = calories, null = default
 
+//Calculator constants
+
+const feetToInches = (feet, inches) => feet * 12 + inches;
+
+//Navigation, Measurement change functions
+
 function setTitle(state) {
 	switch (state) {
 		case null:
@@ -56,9 +62,7 @@ function isMetric() {
 }
 
 function changeActiveUnits(standard, metric) {
-	let isMetricAcitve = isMetric();
-
-	if (!isMetricAcitve) {
+	if (!isMetric()) {
 		standard.forEach((elem) => {
 			elem.classList.remove("hidden");
 		});
@@ -73,6 +77,33 @@ function changeActiveUnits(standard, metric) {
 			elem.classList.remove("hidden");
 		});
 	}
+}
+
+//BMI calculation
+
+function bmiResult(value) {
+	if (!value) return;
+
+	if (value < 18.5) {
+		return "Underweight";
+	} else if (value >= 18.5 && value < 25) {
+		return "Normal";
+	} else if (value >= 25 && value < 40) {
+		return "Overweight";
+	} else if (value >= 40) {
+		return "Obese";
+	} else {
+		return "Invalid value";
+	}
+}
+
+function bmi(measurementState, weight, height) {
+	if (measurementState === 0) {
+		let heightInMeters = height / 100;
+		return (weight / heightInMeters ** 2).toFixed(1);
+	}
+
+	return ((weight / height ** 2) * 703).toFixed(1);
 }
 
 //***************
