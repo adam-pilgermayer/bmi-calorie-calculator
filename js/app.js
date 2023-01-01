@@ -10,6 +10,12 @@ const $bmiStandardInputs = [
 const $bmiMetricInputs = [
 	...document.querySelectorAll(".js-metric-input__bmi"),
 ];
+const $bmiWeightKg = document.querySelector(".js-kg-inp__bmi");
+const $bmiWeightPounds = document.querySelector(".js-pounds-inp__bmi");
+const $bmiHeightCm = document.querySelector(".js-cm-inp__bmi");
+const $bmiHeightFeet = document.querySelector(".js-feet-inp__bmi");
+const $bmiHeightInches = document.querySelector(".js-inch-inp__bmi");
+const $bmiResultTextField = document.querySelector(".js-result__bmi");
 
 //Calories constants
 const $caloriesButton = document.querySelector(".js-calc-btn__calories");
@@ -24,14 +30,10 @@ const $caloriesMetricInputs = [
 
 let activeCalculator = null; // 0 = bmi, 1 = calories, null = default
 
-//Calculator constants
-
-const feetToInches = (feet, inches) => feet * 12 + inches;
-
 //Navigation, Measurement change functions
 
-function setTitle(state) {
-	switch (state) {
+function setTitle(calculatorState) {
+	switch (calculatorState) {
 		case null:
 			console.error("Cannot load title.");
 			break;
@@ -40,7 +42,7 @@ function setTitle(state) {
 		case 1:
 			return "Calorie Calculator";
 		default:
-			console.error(state + " is not a valid state.");
+			console.error(calculatorState + " is not a valid state.");
 	}
 }
 
@@ -65,23 +67,42 @@ function changeActiveUnits(standard, metric) {
 	if (!isMetric()) {
 		standard.forEach((elem) => {
 			elem.classList.remove("hidden");
+			elem.firstElementChild.removeAttribute("disabled", "");
 		});
 		metric.forEach((elem) => {
 			elem.classList.add("hidden");
+			elem.firstElementChild.setAttribute("disabled", "");
 		});
 	} else {
 		standard.forEach((elem) => {
 			elem.classList.add("hidden");
+			elem.firstElementChild.setAttribute("disabled", "");
 		});
 		metric.forEach((elem) => {
 			elem.classList.remove("hidden");
+			elem.firstElementChild.removeAttribute("disabled", "");
 		});
 	}
 }
 
-//BMI calculation
+//calculation helper functions
 
-function bmiResult(value) {
+const feetToInches = (feet, inches) => feet * 12 + inches;
+const getNumberValue = (elem) => Number(elem.value);
+const printResult = (elem, text) => (elem.innerText = text);
+
+//BMI calculator functions
+
+function bmi(isUnitMetric, weight, height) {
+	if (isUnitMetric) {
+		let heightInMeters = height / 100;
+		return (weight / heightInMeters ** 2).toFixed(1);
+	}
+
+	return ((weight / height ** 2) * 703).toFixed(1);
+}
+
+function bmiCategory(value) {
 	if (!value) return;
 
 	if (value < 18.5) {
@@ -97,42 +118,79 @@ function bmiResult(value) {
 	}
 }
 
-function bmi(measurementState, weight, height) {
-	if (measurementState === 0) {
-		let heightInMeters = height / 100;
-		return (weight / heightInMeters ** 2).toFixed(1);
+function bmiEvaluation(unitState) {
+	let bmiVal;
+	let bmiCat;
+
+	if (!unitState) {
+		let bmiWeightPoundsVal = getNumberValue($bmiWeightPounds);
+		let bmiHeightFeetVal = getNumberValue($bmiHeightFeet);
+		let bmiHeightInchesVal = getNumberValue($bmiHeightInches);
+		let totalInches = feetToInches(bmiHeightFeetVal, bmiHeightInchesVal);
+
+		bmiVal = bmi(unitState, bmiWeightPoundsVal, totalInches);
+		bmiCat = bmiCategory(bmiVal);
+	} else if (unitState) {
+		let bmiWeightKgVal = getNumberValue($bmiWeightKg);
+		let bmiHeightCmVal = getNumberValue($bmiHeightCm);
+
+		bmiVal = bmi(unitState, bmiWeightKgVal, bmiHeightCmVal);
+		bmiCat = bmiCategory(bmiVal);
 	}
 
-	return ((weight / height ** 2) * 703).toFixed(1);
+	return [bmiVal, bmiCat];
 }
 
 //***************
 // EventListeners
 //***************
 
+//after page loaded
+
 window.addEventListener("load", () => {
 	activeCalculator = 0;
-	$title.textContent = setTitle(activeCalculator);
+	$title.innerText = setTitle(activeCalculator);
 });
+
+//calculator selection
 
 $bmiButton.addEventListener("click", () => {
 	activeCalculator = 0;
-	$title.textContent = setTitle(activeCalculator);
+	$title.innerText = setTitle(activeCalculator);
 	changeActiveBtnStyle($bmiButton, $caloriesButton);
 	changeActiveForm($bmiForm, $caloriesForm);
 });
 
 $caloriesButton.addEventListener("click", () => {
 	activeCalculator = 1;
-	$title.textContent = setTitle(activeCalculator);
+	$title.innerText = setTitle(activeCalculator);
 	changeActiveBtnStyle($caloriesButton, $bmiButton);
 	changeActiveForm($caloriesForm, $bmiForm);
 });
 
+//Measurement unit switcher
+
 $bmiUnit.addEventListener("click", () => {
+	$bmiResultTextField.innerText = "";
 	changeActiveUnits($bmiStandardInputs, $bmiMetricInputs);
 });
 
 $caloriesUnit.addEventListener("click", () => {
 	changeActiveUnits($caloriesStandardInputs, $caloriesMetricInputs);
+});
+
+//Form submit
+
+$bmiForm.addEventListener("submit", (event) => {
+	event.preventDefault();
+
+	let unitState = isMetric();
+	let [bmiValue, bmiCategory] = bmiEvaluation(unitState);
+
+	printResult($bmiResultTextField, `Your BMI is ${bmiValue} (${bmiCategory})`);
+});
+
+$caloriesForm.addEventListener("submit", (event) => {
+	event.preventDefault();
+	alert("submitted calories");
 });
