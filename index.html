@@ -160,7 +160,7 @@
 						</div>
 						<div class="calc-form-box__calories">
 							<div class="gender-selector-box">
-								<label for="gender-male" class="gender-switcher">
+								<label for="gender-male" class="gender-switcher js-gender-male">
 									<input
 										class="gender-radio"
 										type="radio"
@@ -172,7 +172,9 @@
 										>Male</span
 									>
 								</label>
-								<label for="gender-female" class="gender-switcher">
+								<label
+									for="gender-female"
+									class="gender-switcher js-gender-female">
 									<input
 										class="gender-radio"
 										type="radio"
@@ -326,7 +328,9 @@
 								<button class="calculate-btn" type="submit">Calculate</button>
 							</div>
 						</div>
-						<div class="calc-form-box__calories"></div>
+						<div class="calc-form-box__calories">
+							<div class="js-result__calories result"></div>
+						</div>
 					</div>
 				</form>
 			</section>
