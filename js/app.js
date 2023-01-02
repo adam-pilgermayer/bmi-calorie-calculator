@@ -18,15 +18,26 @@ const $bmiHeightInches = document.querySelector(".js-inch-inp__bmi");
 const $bmiResultTextField = document.querySelector(".js-result__bmi");
 
 //Calories constants
-const $caloriesButton = document.querySelector(".js-calc-btn__calories");
-const $caloriesForm = document.querySelector(".js-calc-calories__form");
-const $caloriesUnit = document.querySelector(".js-unit-switcher-inp__calories");
-const $caloriesStandardInputs = [
+const $calButton = document.querySelector(".js-calc-btn__calories");
+const $calForm = document.querySelector(".js-calc-calories__form");
+const $calUnit = document.querySelector(".js-unit-switcher-inp__calories");
+const $calStandardInputs = [
 	...document.querySelectorAll(".js-standard-input__calories"),
 ];
-const $caloriesMetricInputs = [
+const $calMetricInputs = [
 	...document.querySelectorAll(".js-metric-input__calories"),
 ];
+
+const $calGenderMale = document.querySelector(".js-gender-male");
+const $calGenderFemale = document.querySelector(".js-gender-female");
+const $calAge = document.querySelector(".js-age-inp__calories");
+const $calWeightKg = document.querySelector(".js-kg-inp__calories");
+const $calWeightPounds = document.querySelector(".js-pounds-inp__calories");
+const $calHeightCm = document.querySelector(".js-cm-inp__calories");
+const $calHeightFeet = document.querySelector(".js-feet-inp__calories");
+const $calHeightInches = document.querySelector(".js-inch-inp__calories");
+const $calActivity = document.querySelector(".js-pal-selector");
+const $calResultTextField = document.querySelector(".js-result__calories");
 
 let activeCalculator = null; // 0 = bmi, 1 = calories, null = default
 
@@ -46,42 +57,36 @@ function setTitle(calculatorState) {
 	}
 }
 
-function changeActiveBtnStyle(onBtn, offBtn) {
-	onBtn.classList.add("current-btn");
-	offBtn.classList.remove("current-btn");
+function swapElemStyle(elem1, elem2, style) {
+	elem1.classList.add(style);
+	elem2.classList.remove(style);
 }
 
-function changeActiveForm(onForm, offForm) {
-	onForm.classList.remove("hidden");
-	offForm.classList.add("hidden");
+function isMetric(unitState) {
+	return unitState.checked;
 }
 
-function isMetric() {
-	if (activeCalculator === 0) {
-		return $bmiUnit.checked;
-	}
-	return $caloriesUnit.checked;
+function setInputsActive(inputFields) {
+	inputFields.forEach((elem) => {
+		elem.classList.remove("hidden");
+		elem.firstElementChild.removeAttribute("disabled", "");
+	});
 }
 
-function changeActiveUnits(standard, metric) {
-	if (!isMetric()) {
-		standard.forEach((elem) => {
-			elem.classList.remove("hidden");
-			elem.firstElementChild.removeAttribute("disabled", "");
-		});
-		metric.forEach((elem) => {
-			elem.classList.add("hidden");
-			elem.firstElementChild.setAttribute("disabled", "");
-		});
+function setInputsInactive(inputFields) {
+	inputFields.forEach((elem) => {
+		elem.classList.add("hidden");
+		elem.firstElementChild.setAttribute("disabled", "");
+	});
+}
+
+function changeActiveInputs(unitState, standard, metric) {
+	if (!isMetric(unitState)) {
+		setInputsActive(standard);
+		setInputsInactive(metric);
 	} else {
-		standard.forEach((elem) => {
-			elem.classList.add("hidden");
-			elem.firstElementChild.setAttribute("disabled", "");
-		});
-		metric.forEach((elem) => {
-			elem.classList.remove("hidden");
-			elem.firstElementChild.removeAttribute("disabled", "");
-		});
+		setInputsActive(metric);
+		setInputsInactive(standard);
 	}
 }
 
@@ -141,42 +146,44 @@ function bmiEvaluation(unitState) {
 	return [bmiVal, bmiCat];
 }
 
+//Calories calculator functions
+
 //***************
 // EventListeners
 //***************
 
-//after page loaded
+//After page loaded
 
 window.addEventListener("load", () => {
 	activeCalculator = 0;
-	$title.innerText = setTitle(activeCalculator);
+	printResult($title, setTitle(activeCalculator));
 });
 
-//calculator selection
+//Calculator selection
 
 $bmiButton.addEventListener("click", () => {
 	activeCalculator = 0;
-	$title.innerText = setTitle(activeCalculator);
-	changeActiveBtnStyle($bmiButton, $caloriesButton);
-	changeActiveForm($bmiForm, $caloriesForm);
+	printResult($title, setTitle(activeCalculator));
+	swapElemStyle($bmiButton, $calButton, "current-btn");
+	swapElemStyle($calForm, $bmiForm, "hidden");
 });
 
-$caloriesButton.addEventListener("click", () => {
+$calButton.addEventListener("click", () => {
 	activeCalculator = 1;
-	$title.innerText = setTitle(activeCalculator);
-	changeActiveBtnStyle($caloriesButton, $bmiButton);
-	changeActiveForm($caloriesForm, $bmiForm);
+	printResult($title, setTitle(activeCalculator));
+	swapElemStyle($calButton, $bmiButton, "current-btn");
+	swapElemStyle($bmiForm, $calForm, "hidden");
 });
 
 //Measurement unit switcher
 
 $bmiUnit.addEventListener("click", () => {
-	$bmiResultTextField.innerText = "";
-	changeActiveUnits($bmiStandardInputs, $bmiMetricInputs);
+	printResult($bmiResultTextField, "");
+	changeActiveInputs($bmiUnit, $bmiStandardInputs, $bmiMetricInputs);
 });
 
-$caloriesUnit.addEventListener("click", () => {
-	changeActiveUnits($caloriesStandardInputs, $caloriesMetricInputs);
+$calUnit.addEventListener("click", () => {
+	changeActiveInputs($calUnit, $calStandardInputs, $calMetricInputs);
 });
 
 //Form submit
@@ -184,13 +191,13 @@ $caloriesUnit.addEventListener("click", () => {
 $bmiForm.addEventListener("submit", (event) => {
 	event.preventDefault();
 
-	let unitState = isMetric();
+	let unitState = isMetric($bmiUnit);
 	let [bmiValue, bmiCategory] = bmiEvaluation(unitState);
 
 	printResult($bmiResultTextField, `Your BMI is ${bmiValue} (${bmiCategory})`);
 });
 
-$caloriesForm.addEventListener("submit", (event) => {
+$calForm.addEventListener("submit", (event) => {
 	event.preventDefault();
 	alert("submitted calories");
 });
