@@ -8,7 +8,7 @@ Consulting with a doctor is recommended, if you need more accurate numbers.
  ## How to use
 
 - You can switch between calculators by clicking on the BMI or Calorie button
-- English and Metric unit compatibility (e.g.: pounds - kg)
+- Select your measurement units with Standard and Metric switcher (e.g.: pounds - kg)
 - Type in your measurements, then click on Calculate button to see your results
 
 ## Calculation formulas
@@ -23,7 +23,7 @@ BMI has 4 levels:
 - overweight (25 to 29.9), and 
 - obese (30 or more)
 
-_ENGLISH UNITS_
+_STANDARD UNITS_
 
 <code>Weight in lbs / (Height in inch)<sup>2</sup> * 703</code>
 
@@ -44,7 +44,7 @@ After all, multiply your BMR with your PAL value and you'll get your TDEE (Total
 
 #### BMR
 
-_ENGLISH UNITS_
+_STANDARD UNITS_
 
 <code>**For Men:** 66.47 + (6.24 * weight in lbs) + (12.7 * height in inches) - (6.75 * age in years)</code>
 
@@ -63,4 +63,4 @@ _METRIC UNITS_
 - Light (exercise 1-3 times  a week) `BMR * 1.375`
 - Moderate (exercise 4-5 times a week) `BMR * 1.55`
 - Very active (hard exercise a week) `BMR * 1.725`
-- Extra active (Professional athlete) `BMR * 1.9`
+- Extremely active (Professional athlete) `BMR * 1.9`
