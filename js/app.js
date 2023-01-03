@@ -27,9 +27,7 @@ const $calStandardInputs = [
 const $calMetricInputs = [
 	...document.querySelectorAll(".js-metric-input__calories"),
 ];
-
 const $calGenderMale = document.querySelector(".js-gender-male");
-const $calGenderFemale = document.querySelector(".js-gender-female");
 const $calAge = document.querySelector(".js-age-inp__calories");
 const $calWeightKg = document.querySelector(".js-kg-inp__calories");
 const $calWeightPounds = document.querySelector(".js-pounds-inp__calories");
@@ -41,29 +39,26 @@ const $calResultTextField = document.querySelector(".js-result__calories");
 
 let activeCalculator = null; // 0 = bmi, 1 = calories, null = default
 
+//calculation helper functions
+
+const getStatus = (unitInput) => unitInput.checked;
+const feetToInches = (feet, inches) => feet * 12 + inches;
+const getNumberValue = (elem) => Number(elem.value);
+const printResult = (elem, text) => (elem.innerText = text);
+
 //Navigation, Measurement change functions
 
 function setTitle(calculatorState) {
-	switch (calculatorState) {
-		case null:
-			console.error("Cannot load title.");
-			break;
-		case 0:
-			return "BMI Calculator";
-		case 1:
-			return "Calorie Calculator";
-		default:
-			console.error(calculatorState + " is not a valid state.");
-	}
+	return {
+		null: "Cannot Load title",
+		0: "BMI Calculator",
+		1: "Calorie Calculator",
+	}[calculatorState];
 }
 
 function swapElemStyle(elem1, elem2, style) {
 	elem1.classList.add(style);
 	elem2.classList.remove(style);
-}
-
-function isMetric(unitState) {
-	return unitState.checked;
 }
 
 function setInputsActive(inputFields) {
@@ -80,26 +75,22 @@ function setInputsInactive(inputFields) {
 	});
 }
 
-function changeActiveInputs(unitState, standard, metric) {
-	if (!isMetric(unitState)) {
-		setInputsActive(standard);
-		setInputsInactive(metric);
-	} else {
+function changeActiveInputs(unitInput, standard, metric) {
+	let isMetric = getStatus(unitInput);
+
+	if (isMetric) {
 		setInputsActive(metric);
 		setInputsInactive(standard);
+	} else {
+		setInputsActive(standard);
+		setInputsInactive(metric);
 	}
 }
 
-//calculation helper functions
-
-const feetToInches = (feet, inches) => feet * 12 + inches;
-const getNumberValue = (elem) => Number(elem.value);
-const printResult = (elem, text) => (elem.innerText = text);
-
 //BMI calculator functions
 
-function bmi(isUnitMetric, weight, height) {
-	if (isUnitMetric) {
+function bmi(isMetric, weight, height) {
+	if (isMetric) {
 		let heightInMeters = height / 100;
 		return (weight / heightInMeters ** 2).toFixed(1);
 	}
@@ -123,40 +114,104 @@ function bmiCategory(value) {
 	}
 }
 
-function bmiEvaluation(unitState) {
+function evaluateBMI(isMetric) {
 	let bmiVal;
 	let bmiCat;
 
-	if (!unitState) {
+	if (!isMetric) {
 		let bmiWeightPoundsVal = getNumberValue($bmiWeightPounds);
 		let bmiHeightFeetVal = getNumberValue($bmiHeightFeet);
 		let bmiHeightInchesVal = getNumberValue($bmiHeightInches);
 		let totalInches = feetToInches(bmiHeightFeetVal, bmiHeightInchesVal);
 
-		bmiVal = bmi(unitState, bmiWeightPoundsVal, totalInches);
+		bmiVal = bmi(isMetric, bmiWeightPoundsVal, totalInches);
 		bmiCat = bmiCategory(bmiVal);
-	} else if (unitState) {
+	} else if (isMetric) {
 		let bmiWeightKgVal = getNumberValue($bmiWeightKg);
 		let bmiHeightCmVal = getNumberValue($bmiHeightCm);
 
-		bmiVal = bmi(unitState, bmiWeightKgVal, bmiHeightCmVal);
+		bmiVal = bmi(isMetric, bmiWeightKgVal, bmiHeightCmVal);
 		bmiCat = bmiCategory(bmiVal);
 	}
 
 	return [bmiVal, bmiCat];
 }
 
+const handleBMIForm = (e) => {
+	e.preventDefault();
+
+	let bmiIsMetric = getStatus($bmiUnit);
+	let [bmiValue, bmiCategory] = evaluateBMI(bmiIsMetric);
+
+	printResult($bmiResultTextField, `Your BMI is ${bmiValue} (${bmiCategory})`);
+};
+
 //Calories calculator functions
+
+//TDEE is Total Daily Energy Expenditure
+
+function evaluateBMR(isMetric, isMale) {
+	const CalorieDifferenceMale = 5;
+	const CalorieDifferenceFemale = -161;
+	let calAgeVal = getNumberValue($calAge);
+	let bmrValue;
+
+	if (isMetric) {
+		let calWeightKgVal = getNumberValue($calWeightKg);
+		let calHeightCmVal = getNumberValue($calHeightCm);
+		bmrValue = 10 * calWeightKgVal + 6.25 * calHeightCmVal - 5 * calAgeVal;
+	} else if (!isMetric) {
+		let calWeightPoundsVal = getNumberValue($calWeightPounds);
+		let calHeightFeetVal = getNumberValue($calHeightFeet);
+		let calHeightInchesVal = getNumberValue($calHeightInches);
+		let calTotalFeetVal = feetToInches(calHeightFeetVal, calHeightInchesVal);
+		bmrValue =
+			4.536 * calWeightPoundsVal + 15.88 * calTotalFeetVal - 5 * calAgeVal;
+	}
+
+	if (isMale) {
+		return Math.round(bmrValue + CalorieDifferenceMale);
+	}
+	return Math.round(bmrValue + CalorieDifferenceFemale);
+}
+
+const getTDEE = (multiplier) => (bmrValue) => Math.round(bmrValue * multiplier);
+function evaluateTotalCalorieNeeds(bmrValue, palValue) {
+	let tdee = getTDEE(bmrValue);
+
+	let multipliers = {
+		0: tdee(1.2),
+		1: tdee(1.375),
+		2: tdee(1.55),
+		3: tdee(1.725),
+		4: tdee(1.9),
+	};
+
+	return multipliers[palValue];
+}
+
+const handleCalorieForm = (e) => {
+	e.preventDefault();
+
+	let calIsMetric = getStatus($calUnit);
+	let calIsMale = getStatus($calGenderMale);
+	let calActivityValue = getNumberValue($calActivity);
+
+	let bmrValue = evaluateBMR(calIsMetric, calIsMale);
+	let totalCalorieNeeds = evaluateTotalCalorieNeeds(bmrValue, calActivityValue);
+	printResult(
+		$calResultTextField,
+		`You need ${totalCalorieNeeds} calories a day`
+	);
+};
 
 //***************
 // EventListeners
 //***************
 
 //After page loaded
-
 window.addEventListener("load", () => {
 	activeCalculator = 0;
-	printResult($title, setTitle(activeCalculator));
 });
 
 //Calculator selection
@@ -183,21 +238,12 @@ $bmiUnit.addEventListener("click", () => {
 });
 
 $calUnit.addEventListener("click", () => {
+	printResult($bmiResultTextField, "");
 	changeActiveInputs($calUnit, $calStandardInputs, $calMetricInputs);
 });
 
 //Form submit
 
-$bmiForm.addEventListener("submit", (event) => {
-	event.preventDefault();
+$bmiForm.addEventListener("submit", handleBMIForm);
 
-	let unitState = isMetric($bmiUnit);
-	let [bmiValue, bmiCategory] = bmiEvaluation(unitState);
-
-	printResult($bmiResultTextField, `Your BMI is ${bmiValue} (${bmiCategory})`);
-});
-
-$calForm.addEventListener("submit", (event) => {
-	event.preventDefault();
-	alert("submitted calories");
-});
+$calForm.addEventListener("submit", handleCalorieForm);
