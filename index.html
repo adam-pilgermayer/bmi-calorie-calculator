@@ -11,8 +11,7 @@
 		<h1 class="project-name">BMI & Calorie Calculator</h1>
 		<section class="calc-container">
 			<section class="calc-title-box">
-				<!--Title is depends on current switcher state-->
-				<h2 class="calc-title js-calc-title"></h2>
+				<h2 class="calc-title js-calc-title">BMI Calculator</h2>
 			</section>
 			<section class="calc-container__top">
 				<section class="calc-switcher">
@@ -160,9 +159,9 @@
 						</div>
 						<div class="calc-form-box__calories">
 							<div class="gender-selector-box">
-								<label for="gender-male" class="gender-switcher js-gender-male">
+								<label for="gender-male" class="gender-switcher">
 									<input
-										class="gender-radio"
+										class="gender-radio js-gender-male"
 										type="radio"
 										name="gender"
 										id="gender-male"
@@ -172,11 +171,9 @@
 										>Male</span
 									>
 								</label>
-								<label
-									for="gender-female"
-									class="gender-switcher js-gender-female">
+								<label for="gender-female" class="gender-switcher">
 									<input
-										class="gender-radio"
+										class="gender-radio js-gender-female"
 										type="radio"
 										name="gender"
 										id="gender-female"
