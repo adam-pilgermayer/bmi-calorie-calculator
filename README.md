@@ -42,20 +42,20 @@ Then, choose your PAL (physical activity level). This has 5 levels.
 
 After all, multiply your BMR with your PAL value and you'll get your TDEE (Total Daily Energy Expenditure), which is your daily calorie needs based on your activity level.
 
-#### BMR
+#### BMR (Mifflin-St Jeor equation)
 
 _STANDARD UNITS_
 
-<code>**For Men:** 66.47 + (6.24 * weight in lbs) + (12.7 * height in inches) - (6.75 * age in years)</code>
+<code>**For Men:** 4.536 * (weight in lbs) + 15.88 * (height in inches) - 5 * (age in years) + 5</code>
 
-<code>**For Women:** 65.51 + (4.35 * weight in lbs) + (4.7 * height in inches) - (4.7 * age in years)</code>
+<code>**For Women:** 4.536 * (weight in lbs) + 15.88 * (height in inches) - 5 * (age in years) - 161</code>
 
 
 _METRIC UNITS_
 
-<code>**For Men:** 66.5 + (13.75 * weight in kg) + (5.003 * height in cm) - (6.75 * age in years)</code>
+<code>**For Men:** 10 * (weight in kg) + 6.25 * (height in cm) - 5 * (age in years) + 5</code>
 
-<code>**For Women:** 655.1 + (9.563 * weight in kg) + (1.850 * height in cm) - (4.676 * age in years)</code>
+<code>**For Women:** 10 * (weight in kg) + 6.25 * (height in cm) - 5 * (age in years) - 161</code>
 
 #### TDEE
 
