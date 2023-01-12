@@ -19,6 +19,7 @@
 	--darker-orange: #b47b00;
 	--light-blue: #3093f0;
 	--blue: #0f79dd;
+	--transparent-blue: #56adff8f;
 	--red: #ff7a7a;
 	--green: #1ebe36;
 	--yellow: #ddbf12;
@@ -38,11 +39,14 @@ html {
 
 body {
 	background-color: var(--dark-grey);
+	color: var(--white);
+}
+
+.wrapper {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	height: 100vh;
-	color: var(--white);
 }
 
 .project-name {
@@ -50,22 +54,27 @@ body {
 	font-weight: 400;
 	font-size: 3rem;
 	letter-spacing: 2px;
+	text-align: center;
 }
 
-.calc-container {
+.calc-container,
+.desc-container {
 	background-color: var(--black);
 	border-radius: var(--light-border-radius);
 	box-shadow: 0 0 4px var(--black);
 	width: 100%;
 	max-width: 500px;
+	margin: 2rem 0;
 }
 
-.calc-title-box {
+.calc-title-box,
+.desc-title-box {
 	padding: 2rem;
 	width: 100%;
 }
 
-.calc-title {
+.calc-title,
+.desc-title {
 	font-size: 2.4rem;
 	font-weight: 400;
 	letter-spacing: 1px;
@@ -142,7 +151,9 @@ body {
 .calc-form-box__calories:nth-child(4),
 .calc-form-box__calories:nth-child(5),
 .calc-form-box__calories:nth-child(6) {
-	width: 350px;
+	width: 290px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .unit-switcher-container {
@@ -203,6 +214,10 @@ body {
 	align-items: center;
 }
 
+.input-title {
+	width: 100%;
+}
+
 .textbox {
 	width: 180px;
 	margin: 1rem;
@@ -220,6 +235,10 @@ body {
 	background-color: var(--dark-grey);
 }
 
+.textbox-short {
+	width: 80px;
+}
+
 .form-buttons {
 	margin: 3rem 0 0;
 }
@@ -232,7 +251,7 @@ body {
 	color: var(--white);
 	border-radius: var(--light-border-radius);
 	padding: 1rem 0;
-	margin: 1rem;
+	margin: 1rem 3rem;
 	width: 110px;
 	font-size: 2rem;
 	transition: var(--btn-transition-speed);
@@ -305,6 +324,37 @@ body {
 	box-shadow: none;
 }
 
+.desc-content {
+	padding: 2rem 3rem;
+	font-size: 1.5rem;
+}
+
+.desc-important {
+	background-color: var(--transparent-blue);
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 2rem 1rem;
+	font-size: 1.5rem;
+	font-weight: 600;
+}
+
+.desc-info > h2,
+.desc-info > ul,
+.desc-info > p {
+	padding: 1rem 0;
+}
+
+.desc-info > p > a:visited {
+	color: var(--light-blue);
+}
+
+mark {
+	background-color: rgb(170, 170, 170);
+	padding: 0.5rem;
+	line-height: 3rem;
+}
+
 .hidden {
 	display: none;
 }
@@ -319,4 +369,20 @@ body {
 
 .excellent {
 	color: var(--green);
+}
+
+@media only screen and (min-width: 1280px) {
+	.wrapper {
+		flex-direction: row;
+		justify-content: center;
+		align-items: flex-start;
+		gap: 4rem;
+	}
+
+	.desc-container {
+		display: flex;
+		flex-direction: column;
+		height: 800px;
+		overflow-y: scroll;
+	}
 }
