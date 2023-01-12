@@ -251,7 +251,7 @@ body {
 	color: var(--white);
 	border-radius: var(--light-border-radius);
 	padding: 1rem 0;
-	margin: 1rem 3rem;
+	margin: 1rem;
 	width: 110px;
 	font-size: 2rem;
 	transition: var(--btn-transition-speed);

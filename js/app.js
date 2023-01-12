@@ -41,7 +41,7 @@ let activeCalculator = null; // 0 = bmi, 1 = calories, null = default
 
 //calculation helper functions
 
-const getStatus = (unitInput) => unitInput.checked;
+const getStatus = (input) => input.checked;
 const feetToInches = (feet, inches) => feet * 12 + inches;
 const getNumberValue = (elem) => Number(elem.value);
 const printResult = (elem, text) => (elem.innerText = text);
@@ -89,15 +89,6 @@ function changeActiveInputs(unitInput, standard, metric) {
 
 //BMI calculator functions
 
-function bmi(isMetric, weight, height) {
-	if (isMetric) {
-		let heightInMeters = height / 100;
-		return (weight / heightInMeters ** 2).toFixed(1);
-	}
-
-	return ((weight / height ** 2) * 703).toFixed(1);
-}
-
 function bmiCategory(value) {
 	if (!value) return;
 
@@ -112,6 +103,15 @@ function bmiCategory(value) {
 	} else {
 		return "Invalid value";
 	}
+}
+
+function bmi(isMetric, weight, height) {
+	if (isMetric) {
+		let heightInMeters = height / 100;
+		return (weight / heightInMeters ** 2).toFixed(1);
+	}
+
+	return ((weight / height ** 2) * 703).toFixed(1);
 }
 
 function evaluateBMI(isMetric) {
@@ -149,6 +149,20 @@ const handleBMIForm = (e) => {
 //Calories calculator functions
 
 //TDEE is Total Daily Energy Expenditure
+const getTDEE = (multiplier) => (bmrValue) => Math.round(bmrValue * multiplier);
+function evaluateTotalCalorieNeeds(bmrValue, palValue) {
+	let tdee = getTDEE(bmrValue);
+
+	let multipliers = {
+		0: tdee(1.2),
+		1: tdee(1.375),
+		2: tdee(1.55),
+		3: tdee(1.725),
+		4: tdee(1.9),
+	};
+
+	return multipliers[palValue];
+}
 
 function evaluateBMR(isMetric, isMale) {
 	const CalorieDifferenceMale = 5;
@@ -173,21 +187,6 @@ function evaluateBMR(isMetric, isMale) {
 		return Math.round(bmrValue + CalorieDifferenceMale);
 	}
 	return Math.round(bmrValue + CalorieDifferenceFemale);
-}
-
-const getTDEE = (multiplier) => (bmrValue) => Math.round(bmrValue * multiplier);
-function evaluateTotalCalorieNeeds(bmrValue, palValue) {
-	let tdee = getTDEE(bmrValue);
-
-	let multipliers = {
-		0: tdee(1.2),
-		1: tdee(1.375),
-		2: tdee(1.55),
-		3: tdee(1.725),
-		4: tdee(1.9),
-	};
-
-	return multipliers[palValue];
 }
 
 const handleCalorieForm = (e) => {
@@ -218,6 +217,7 @@ window.addEventListener("load", () => {
 
 $bmiButton.addEventListener("click", () => {
 	activeCalculator = 0;
+	printResult($bmiResultTextField, "");
 	printResult($title, setTitle(activeCalculator));
 	swapElemStyle($bmiButton, $calButton, "current-btn");
 	swapElemStyle($calForm, $bmiForm, "hidden");
@@ -225,6 +225,7 @@ $bmiButton.addEventListener("click", () => {
 
 $calButton.addEventListener("click", () => {
 	activeCalculator = 1;
+	printResult($calResultTextField, "");
 	printResult($title, setTitle(activeCalculator));
 	swapElemStyle($calButton, $bmiButton, "current-btn");
 	swapElemStyle($bmiForm, $calForm, "hidden");
@@ -238,7 +239,7 @@ $bmiUnit.addEventListener("click", () => {
 });
 
 $calUnit.addEventListener("click", () => {
-	printResult($bmiResultTextField, "");
+	printResult($calResultTextField, "");
 	changeActiveInputs($calUnit, $calStandardInputs, $calMetricInputs);
 });
 
